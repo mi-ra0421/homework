@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -20,8 +21,7 @@ for song in songs :
         rank =song.select_one('td.number').text  
         title = a_tag.text  
         artist = song.select_one('td.info > a.artist.ellipsis').text                     
-        print(rank.split()[0], title.strip(), artist)
-
+        print(a_tag.text)
 
 
 
