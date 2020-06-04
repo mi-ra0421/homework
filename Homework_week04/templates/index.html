@@ -53,7 +53,7 @@
         }
 
         .imge {
-            display : none;
+            display: none;
             margin: 0 auto;
         }
 
@@ -96,24 +96,25 @@
         })
 
         function make_order() {
-            let value1 = $('#productnumber').val();
-            let value2 = $('#color').val();
-            let value3 = $('#name').val();
-            let value4 = $('#address').val();
-            let value5 = $('#phonenumber').val();
+// 주의 변수명 통일!
+            let productnumber = $('#productnumber').val();
+            let color = $('#color').val();
+            let buyername = $('#buyername').val();
+            let address = $('#address').val();
+            let phonenumber = $('#phonenumber').val();
 
-            if (value1 == '') {
+            if (productnumber == '') {
                 alert('수량을 입력하세요!');
-            } else if (value2 == '') {
+            } else if (color == '') {
                 alert('색상을 입력하세요!');
                 return;
-            } else if (value3 == '') {
+            } else if (buyername == '') {
                 alert('이름을 입력하세요!');
                 return;
-            } else if (value4 == '') {
+            } else if (address == '') {
                 alert('주소을 입력하세요!');
                 return;
-            } else if (value5 == '') {
+            } else if (phonenumber == '') {
                 alert('휴대포번호를 입력하세요!');
                 return;
             }
@@ -121,7 +122,7 @@
             $.ajax({
                 type: "POST",
                 url: "/orders",
-                data: {productnumber_give: phonenumber, color_give: color,  name_give: name, address_give: address, phonenumber_give: phonenumber},
+                data: { productnumber_give: productnumber, color_give: color, buyername_give: buyername, address_give: address, phonenumber_give: phonenumber },
                 success: function (response) {
                     if (response['result'] == 'success') {
                         alert(response['msg']);
@@ -132,8 +133,13 @@
 
         }
 
+        $(document).ready(function () {
+            $('#orders-box').html('');
+            listing();
+        });
+
         function listing() {
-            // 1. 리뷰 목록을 서버에 요청하기
+            // 1. 주문 목록을 서버에 요청하기
             $.ajax({
                 type: "GET",
                 url: "/orders",
@@ -144,25 +150,25 @@
                         let orders = response['orders'];
                         // 3. 요청 성공했을 때 리뷰를 올바르게 화면에 나타내기
                         for (let i = 0; i < orders.length; i++) {
-                            make_list(orders[i]['productnumber'], orders[i]['color'], orders[i]['name'], orders[i]['address'], orders[i]['author']);
+                            make_list(orders[i]['productnumber'], orders[i]['color'], orders[i]['buyername'], orders[i]['address'], orders[i]['phonenumber']);
                         }
                     } else {
                         alert('리뷰를 받아오지 못했습니다');
                     }
                 }
             })
-        
-        function make_list(productnumber,color,name, address, phonenumber)  {
-            let temp_html = `<tr>
+
+            function make_list(productnumber, color, buyername, address, phonenumber) {
+                let temp_html = `<tr>
                         <td>${productnumber}</td>
                         <td>${color}</td>
-                        <td>${name}</td>
+                        <td>${buyername}</td>
                         <td>${address}</td>
                         <td>${phonenumber}</td>
                     </tr>`;
-            $('#orders-box').append(temp_html);
-        }
-        
+                $('#orders-box').append(temp_html);
+            }
+
         }
 
     </script>
@@ -249,9 +255,9 @@
             </div>
             <select class="custom-select" id="productnumber">
                 <option value="">구매수량을 선택해주세요(1인 최대 3대 제한)</option>
-                <option value="1">1대</option>
-                <option value="2">2대</option>
-                <option value="3">3대</option>
+                <option value="1대">1대</option>
+                <option value="2대">2대</option>
+                <option value="3대">3대</option>
             </select>
         </div>
 
@@ -261,8 +267,8 @@
             </div>
             <select class="custom-select" id="color">
                 <option value="">원하시는 색상을 선택해주세요</option>
-                <option value="1">실버</option>
-                <option value="2">블랙</option>
+                <option value="실버">실버</option>
+                <option value="블랙">블랙</option>
             </select>
         </div>
 
@@ -275,7 +281,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">이름</span>
             </div>
-            <input id="name" type="text" class="form-control" placeholder="성함을 입력해주세요" aria-label="Username"
+            <input id="buyername" type="text" class="form-control" placeholder="성함을 입력해주세요" aria-label="Username"
                 aria-describedby="basic-addon1">
         </div>
 
@@ -305,7 +311,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">수량</th>
                 <th scope="col">생상</th>
                 <th scope="col">이름</th>
@@ -315,12 +320,11 @@
         </thead>
         <tbody id="orders-box">
             <tr>
-                <th scope="row">1</th>
-                <td>a</td>
-                <td>a</td>
-                <td>a</td>
-                <td>a</td>
-                <td>a</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
